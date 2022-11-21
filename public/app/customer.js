@@ -6,7 +6,7 @@ let childAgeNo = document.getElementById('childAgeNo');
 let userId = document.getElementById('userId');
 // end of child registration no children inputs
 // regex
-const hebNameRegexN = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/iu;
+const hebNameRegexN = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/i;
 const ageRegexN = new RegExp('^[0-9]{1,2}$');
 // end of regex
 // form validation
