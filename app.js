@@ -253,7 +253,7 @@ app.post('/childReg', (req, res) => {
             throw err;
         if (!err) {
             if (checkResult.length > 0) {
-                console.log('child already exist');
+                res.send(alert('שם הילד כבר קיים במערכת'));
             }
             else {
                 let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
