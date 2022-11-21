@@ -52,12 +52,17 @@ registrationForm.addEventListener('submit', (evt) => {
                             null;
                         }
                         else {
-                            PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
-                            if (regHouseNum.value.length === 0) {
+                            if (regOtherPhone.value.length === 0) {
                                 null;
                             }
                             else {
-                                houseNumValidationR(evt, regHouseNum, 'מספר בית');
+                                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                                if (regHouseNum.value.length === 0) {
+                                    null;
+                                }
+                                else {
+                                    houseNumValidationR(evt, regHouseNum, 'מספר בית');
+                                }
                             }
                         }
                     }
