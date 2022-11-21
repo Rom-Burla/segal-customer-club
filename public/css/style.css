@@ -14,6 +14,12 @@ body{
     flex-wrap: wrap;
     justify-content: center;
 }
+.back-btn{
+    margin-top: 2%;
+}
+.back-btn>a{
+    color: white;
+}
 img{
     width: 300px;
     margin-left: 20px;
