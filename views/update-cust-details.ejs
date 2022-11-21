@@ -4,6 +4,7 @@
 <title><%=result[0].name%> עדכון פרטים</title>
 <%-include('./partials/navbar.ejs')%>
 
+<button><a href="/">חזרה לדף הבית</a></button>
 <h1><%=result[0].name%> עדכון פרטי משתמש</h1>
 <form action="/update/<%=result[0].id%>" method="post" class="registration-form" id="update-form">
    <div>
