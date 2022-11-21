@@ -101,6 +101,7 @@ input{
     font-size: 18px;
     font-weight: 600;
     border: none;
+    width: 100%;
 }
 input:hover{
     border: solid 4px #33a7b5;
