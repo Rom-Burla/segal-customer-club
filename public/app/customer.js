@@ -16,20 +16,8 @@ childRegNo.addEventListener('submit', (evt) => {
         evt.preventDefault();
     }
     else {
-        if (childNameNo.value.length === 0) {
-            alert('השדה שם הילד ריק והוא שדה חובה');
-            evt.preventDefault();
-        }
-        else {
-            hebNameValidationN(evt, childNameNo, 'שם הילד');
-            if (childAgeNo.value.length === 0) {
-                alert('השדה גיל הילד ריק והוא שדה חובה');
-                evt.preventDefault();
-            }
-            else {
-                childAgeValidationN(evt, childAgeNo, 'גיל הילד');
-            }
-        }
+        hebNameValidationN(evt, childNameNo, 'שם הילד');
+        childAgeValidationN(evt, childAgeNo, 'גיל הילד');
     }
 });
 // end of form validation
