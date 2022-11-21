@@ -38,11 +38,30 @@ registrationForm.addEventListener('submit', (evt) => {
             else {
                 PhonevalidationR(evt, regPhone, 'מספר טלפון');
                 emailValidationR(evt, regMail, 'אימייל');
-                hebStreetValidationR(evt, regStreet, 'רחוב');
-                apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
-                cityValidationR(evt, regCity, 'עיר');
-                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
-                houseNumValidationR(evt, regHouseNum, 'מספר בית');
+                if (regStreet.value.length === 0) {
+                    null;
+                }
+                else {
+                    hebStreetValidationR(evt, regStreet, 'רחוב');
+                    if (regApartementNum.value.length === 0) {
+                    }
+                    else {
+                        apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
+                        cityValidationR(evt, regCity, 'עיר');
+                        if (regOtherPhone.value.length === 0) {
+                            null;
+                        }
+                        else {
+                            PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                            if (regHouseNum.value.length === 0) {
+                                null;
+                            }
+                            else {
+                                houseNumValidationR(evt, regHouseNum, 'מספר בית');
+                            }
+                        }
+                    }
+                }
             }
         }
     }
