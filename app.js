@@ -13,14 +13,25 @@ const express = require("express");
 const app = express();
 const { join } = require("path");
 const mysql = require('mysql');
+const session = require('express-session');
+const flash = require('connect-flash');
+const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3306;
 // express uses
-app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+app.use(express.json());
 app.use(express.static(join(__dirname, "public")));
 app.use(express.static("."));
+app.use(cookieParser('secret session club'));
+app.use(session({
+    secret: 'cclub session',
+    cookie: { maxAge: 60000 },
+    saveUninitialized: true,
+    resave: true
+}));
+app.use(flash());
 // view engine
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -173,13 +184,15 @@ app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (err)
             throw err;
         if (!err) {
-            res.render("index.ejs", { result });
+            const message = req.flash('success');
+            res.render("index.ejs", { result, message });
         }
     });
 }));
 // Render registration page
 app.get('/registration', (req, res) => {
-    res.render('registration.ejs');
+    const message = req.flash('success');
+    res.render('registration.ejs', { message });
 });
 // Render update page (by id)
 app.get('/update/:id', (req, res) => {
@@ -206,7 +219,8 @@ app.post('/getCustPhone', (req, res) => __awaiter(void 0, void 0, void 0, functi
                         if (err)
                             throw err;
                         if (!err) {
-                            res.render("customer-w-children.ejs", { result });
+                            const message = req.flash('success');
+                            res.render("customer-w-children.ejs", { result, message });
                         }
                     });
                 }));
@@ -235,25 +249,103 @@ app.post('/getCustPhone', (req, res) => __awaiter(void 0, void 0, void 0, functi
 // Insert user to database after filling the registration form 
 app.post('/registration', (req, res) => {
     let { name, phone, otherPhone, email, street, houseNum, apartementNum, city } = req.body;
-    let query = `INSERT INTO \`users\`( \`name\`, \`phone\`, \`other_phone\`, \`str_address\`, \`house_num\`, \`apartement_num\`, \`city\`, \`email\`) VALUES("${name}","${phone}","${otherPhone}","${street}",${houseNum},"${apartementNum}", "${city}", "${email}")`;
+    let query = `SELECT * FROM users WHERE email = '${email}'`;
     connection.query(query, (err, result) => {
         if (err)
             throw err;
         if (!err) {
-            res.redirect(`/`);
+            if (result.length > 0) {
+                req.flash('success', 'אימייל כבר קיים במערכת');
+                res.redirect('back');
+            }
+            else {
+                let query = `SELECT * FROM users WHERE phone = '${phone}'`;
+                connection.query(query, (err, result) => {
+                    if (err)
+                        throw err;
+                    if (!err) {
+                        if (result.length > 0) {
+                            req.flash('success', 'הטלפון כבר קיים במערכת');
+                            res.redirect('back');
+                        }
+                        else {
+                            let query = `SELECT * FROM users WHERE phone = '${otherPhone}'`;
+                            connection.query(query, (err, result) => {
+                                if (err)
+                                    throw err;
+                                if (!err) {
+                                    if (result.length > 0) {
+                                        req.flash('success', 'הטלפון הנוסף כבר קיים במערכת');
+                                        res.redirect('back');
+                                    }
+                                    else {
+                                        let query = `SELECT * FROM users WHERE other_phone = '${phone}'`;
+                                        connection.query(query, (err, result) => {
+                                            if (err)
+                                                throw err;
+                                            if (!err) {
+                                                if (result.length > 0) {
+                                                    req.flash('success', 'הטלפון כבר קיים במערכת');
+                                                    res.redirect('back');
+                                                }
+                                                else {
+                                                    let query = `SELECT * FROM users WHERE other_phone = '${otherPhone}'`;
+                                                    connection.query(query, (err, result) => {
+                                                        if (err)
+                                                            throw err;
+                                                        if (!err) {
+                                                            if (result.length > 0) {
+                                                                req.flash('success', 'הטלפון הנוסף כבר קיים במערכת');
+                                                                res.redirect('back');
+                                                            }
+                                                            else {
+                                                                let query = `INSERT INTO \`users\`( \`name\`, \`phone\`, \`other_phone\`, \`str_address\`, \`house_num\`, \`apartement_num\`, \`city\`, \`email\`) VALUES("${name}","${phone}","${otherPhone}","${street}",${houseNum},"${apartementNum}", "${city}", "${email}")`;
+                                                                connection.query(query, (err, result) => {
+                                                                    if (err)
+                                                                        throw err;
+                                                                    if (!err) {
+                                                                        req.flash('success', 'נרשמת בהצלחה הכנס מספר טלפון כדי להכנס למשתמש');
+                                                                        res.redirect(`/`);
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
     });
 });
 // Insert new child from the user specific page childReg form
 app.post('/childReg', (req, res) => {
-    let { childName, childAge, user_id } = req.body;
-    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name = '"${childName}"'`;
-    connection.query(query, (err, checkResult) => {
+    let { childName, childAge, user_id, user_phone } = req.body;
+    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name = '${childName}'`;
+    connection.query(query, (err, result) => __awaiter(void 0, void 0, void 0, function* () {
         if (err)
             throw err;
         if (!err) {
-            if (checkResult.length !== 0) {
-                res.render('childReg', { child_name: childName, condition: false, fail: false });
+            if (result.length > 0) {
+                app.get("/" + user_phone + "/children", (req, res) => {
+                    connection.query(`SELECT * FROM \`users\` JOIN child_age ON child_age.user_id=users.id WHERE \`phone\`= ?`, [user_phone.toString()], (err, result) => {
+                        if (err)
+                            throw err;
+                        if (!err) {
+                            const message = req.flash('success');
+                            res.render("customer-w-children.ejs", { result, message });
+                        }
+                    });
+                });
+                req.flash('success', `${childName} כבר רשום/ה במערכת`);
+                res.redirect("/" + user_phone + "/children");
+                console.log('duplicate');
             }
             else {
                 let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
@@ -267,9 +359,11 @@ app.post('/childReg', (req, res) => {
                                 throw err;
                             if (!err) {
                                 if (result.length > 1) {
+                                    req.flash('success', `${childName} נרשם/ה במערכת`);
                                     res.redirect('back');
                                 }
                                 else {
+                                    req.flash('success', `${childName} נרשם/ה במערכת הכנס מספר טלפון כדי לראות אותו/ה`);
                                     res.redirect('/');
                                 }
                             }
@@ -278,7 +372,7 @@ app.post('/childReg', (req, res) => {
                 });
             }
         }
-    });
+    }));
 });
 // Update user details from update form in user specific update page
 app.post('/update/:id', (req, res) => {
@@ -292,6 +386,7 @@ app.post('/update/:id', (req, res) => {
             console.log(result);
         }
     });
+    req.flash('success', 'פרטי המשתמש עודכנו בהצלחה הכנס מספר טלפון כדי להכנס');
     res.redirect('/');
 });
 app.listen(port, (err, res) => {

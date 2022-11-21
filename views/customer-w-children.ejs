@@ -10,6 +10,11 @@
 <a href="/update/<%=result[0].id%>"><button>עדכון פרטי משתמש</button></a>
 
 <h2>הילדים שלך:</h2>
+<% if (message.length>0) { %>
+    <div class="flash">
+    <h3><%= message %></h3>
+    </div>
+    <% } %>
 <%result.forEach(child=>{%>
     <div class="child-details">
     <h3>שם: <%=child.child_name%></h3>
@@ -30,6 +35,10 @@
     <div id="child-form-user-id">
         <label for="">user_id</label>
         <input type="text" name="user_id" value=<%=result[0].id%> id='userId'>
+    </div>
+    <div id="child-form-user-phone">
+        <label for="">user_phone</label>
+        <input type="text" name="user_phone" value=<%=result[0].phone%> id='userPhone'>
     </div>
     <button>הוסף</button>
 </form>

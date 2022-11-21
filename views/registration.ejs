@@ -7,6 +7,12 @@
 <button class="back-btn"><a href="/">חזרה לדף הבית</a></button>
 <h1>הרשמה למועדון הלקוחות שלנו</h1>
 
+<% if (message.length>0) { %>
+    <div class="flash">
+    <h3><%= message %></h3>
+    </div>
+    <% } %>
+
 <form action="/registration" method="post" class="registration-form" id="registration-form">
    <div>
     <label for="">שם מלא *</label>
