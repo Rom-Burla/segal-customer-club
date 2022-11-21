@@ -9,6 +9,11 @@ body{
     margin-top: 2%;
     overflow-x: hidden;
 }
+.nav-pic{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 img{
     width: 300px;
     margin-left: 20px;
