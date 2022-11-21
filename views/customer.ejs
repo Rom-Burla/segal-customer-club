@@ -10,7 +10,7 @@
 <a href="/update/<%=result[0].id%>"><button>עדכון פרטי משתמש</button></a>
 
 <h2>הוספת ילד</h2>
-<form action="/childReg" method="get" class="child-reg" id="child-reg-no">
+<form action="/childReg" method="post" class="child-reg" id="child-reg-no">
     <div>
         <label for="">שם הילד *</label>
         <input type="text" name="childName" id="childNameNo" required oninvalid="this.setCustomValidity('שדה חובה')" oninput="this.setCustomValidity('')">
