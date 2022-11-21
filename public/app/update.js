@@ -140,7 +140,7 @@ function emailValidationU(evt, input, inputLabel) {
     if (test === null) {
         alert('שדה ' + inputLabel + (' לא תקין'));
         input.value = '';
-        evt.preventDefault;
+        evt.preventDefault();
     }
     else {
         return true;
