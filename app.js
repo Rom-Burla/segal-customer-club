@@ -245,19 +245,19 @@ app.post('/registration', (req, res) => {
     });
 });
 // Insert new child from the user specific page childReg form
-app.post('/childReg', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/childReg', (req, res) => {
     let { childName, childAge, user_id } = req.body;
-    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name LIKE '${childName}'`;
-    yield connection.query(query, (err, checkResult) => __awaiter(void 0, void 0, void 0, function* () {
+    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name = '${childName}'`;
+    connection.query(query, (err, checkResult) => {
         if (err)
             throw err;
         if (!err) {
             if (checkResult.length > 0) {
-                res.redirect(`/update/${user_id}`);
+                res.send('already in db');
             }
             else {
                 let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
-                yield connection.query(query, (err, result) => {
+                connection.query(query, (err, result) => {
                     if (err)
                         throw err;
                     if (!err) {
@@ -278,8 +278,8 @@ app.post('/childReg', (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 });
             }
         }
-    }));
-}));
+    });
+});
 // Update user details from update form in user specific update page
 app.post('/update/:id', (req, res) => {
     let id = req.params.id;
