@@ -19,7 +19,7 @@
     </div>
     <div>
         <label for="">הכנס את מספר הטלפון שלך</label>
-        <input type="text" name="phoneInp" id="phone-input" required>
+        <input type="text" name="phoneInp" id="phone-input" required oninvalid="this.setCustomValidity('הכנס מספר טלפון כדי להמשיך')">
     </div>
     <button id="submit-phone">המשך</button>
     </form>

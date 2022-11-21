@@ -8,11 +8,11 @@
 <form action="/update/<%=result[0].id%>" method="post" class="registration-form" id="update-form">
    <div>
     <label for="">שם מלא</label>
-    <input type="text" name="name" value="<%=result[0].name%>" id="upName">
+    <input type="text" name="name" value="<%=result[0].name%>" id="upName" required oninvalid="this.setCustomValidity('שדה חובה')">
 </div>
    <div>
     <label for="">טלפון</label>
-    <input type="text" name="phone" value="<%=result[0].phone%>" id="upPhone">
+    <input type="text" name="phone" value="<%=result[0].phone%>" id="upPhone" required oninvalid="this.setCustomValidity('שדה חובה')">
 </div>
    <div>
     <label for="">טלפון נוסף</label>
@@ -20,7 +20,7 @@
 </div>
    <div>
     <label for="">אימייל</label>
-    <input type="email" name="email" value="<%=result[0].email%>" id="upMail">
+    <input type="email" name="email" value="<%=result[0].email%>" id="upMail" required oninvalid="this.setCustomValidity('שדה חובה')">
 </div>
    <div>
     <label for="">רחוב</label>
@@ -36,7 +36,7 @@
 </div>
    <div>
     <label for="">עיר</label>
-    <input type="text" name="city" value="<%=result[0].city%>" id="upCity">
+    <input type="text" name="city" value="<%=result[0].city%>" id="upCity" required oninvalid="this.setCustomValidity('שדה חובה')">
 </div>
 <button>עדכן פרטי משתמש</button>
 </form>
