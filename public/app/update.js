@@ -31,38 +31,18 @@ updateForm.addEventListener('submit', (evt) => {
             alert('טלפון ריק והוא שדה חובה');
         }
         else {
-            PhonevalidationU(evt, upPhone, 'מספר טלפון');
-            if (upStreet.value.length === 0) {
-                return null;
+            if (upCity.value.length === 0) {
+                evt.preventDefault();
+                alert('שדה עיר ריק והוא שדה חובה');
             }
             else {
+                PhonevalidationU(evt, upPhone, 'מספר טלפון');
                 hebStreetValidationU(evt, upStreet, 'רחוב');
-                if (upHouseNum.value.length === 0) {
-                    return null;
-                }
-                else {
-                    houseNumValidationU(evt, upHouseNum, 'מספר בית');
-                    if (upApartementNum.value.length === 0) {
-                        return null;
-                    }
-                    else {
-                        apartementNumValidationU(evt, upApartementNum, 'מספר דירה/ כניסה');
-                        if (upCity.value.length === 0) {
-                            evt.preventDefault();
-                            alert('שדה עיר ריק והוא שדה חובה');
-                        }
-                        else {
-                            cityValidationU(evt, upCity, 'עיר');
-                            if (upOtherPhone.value.length === 0) {
-                                return null;
-                            }
-                            else {
-                                emailValidationU(evt, upMail, 'אימייל');
-                                PhonevalidationU(evt, upOtherPhone, 'מספר הטלפון הנוסף');
-                            }
-                        }
-                    }
-                }
+                houseNumValidationU(evt, upHouseNum, 'מספר בית');
+                apartementNumValidationU(evt, upApartementNum, 'מספר דירה/ כניסה');
+                cityValidationU(evt, upCity, 'עיר');
+                emailValidationU(evt, upMail, 'אימייל');
+                PhonevalidationU(evt, upOtherPhone, 'מספר הטלפון הנוסף');
             }
         }
     }
