@@ -8,6 +8,7 @@ body{
     color: white;
     margin-top: 2%;
     overflow-x: hidden;
+    text-align: center;
 }
 .nav-pic{
     display: flex;
@@ -181,7 +182,7 @@ select:focus{
 
 @media only screen and (max-width: 425px) {
         img {
-                width: 40%;
+                width: 60%;
                 margin-top: 5%;
             }
                          .heading h1 {
