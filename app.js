@@ -253,7 +253,7 @@ app.post('/childReg', (req, res) => {
             throw err;
         if (!err) {
             if (checkResult.length > 0) {
-                alert('child already exist');
+                console.log('child already exist');
             }
             else {
                 let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
