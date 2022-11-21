@@ -37,12 +37,32 @@ updateForm.addEventListener('submit', (evt) => {
             }
             else {
                 PhonevalidationU(evt, upPhone, 'מספר טלפון');
-                hebStreetValidationU(evt, upStreet, 'רחוב');
-                apartementNumValidationU(evt, upApartementNum, 'מספר דירה/ כניסה');
-                cityValidationU(evt, upCity, 'עיר');
-                emailValidationU(evt, upMail, 'אימייל');
-                PhonevalidationU(evt, upOtherPhone, 'מספר הטלפון הנוסף');
-                houseNumValidationU(evt, upHouseNum, 'מספר בית');
+                if (upStreet.value.length === 0) {
+                    null;
+                }
+                else {
+                    hebStreetValidationU(evt, upStreet, 'רחוב');
+                    if (upApartementNum.value.length === 0) {
+                        null;
+                    }
+                    else {
+                        apartementNumValidationU(evt, upApartementNum, 'מספר דירה/ כניסה');
+                        cityValidationU(evt, upCity, 'עיר');
+                        emailValidationU(evt, upMail, 'אימייל');
+                        if (upOtherPhone.value.length === 0) {
+                            null;
+                        }
+                        else {
+                            PhonevalidationU(evt, upOtherPhone, 'מספר הטלפון הנוסף');
+                            if (upHouseNum.value.length === 0) {
+                                null;
+                            }
+                            else {
+                                houseNumValidationU(evt, upHouseNum, 'מספר בית');
+                            }
+                        }
+                    }
+                }
             }
         }
     }

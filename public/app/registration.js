@@ -31,39 +31,29 @@ registrationForm.addEventListener('submit', (evt) => {
             alert('טלפון ריק והוא שדה חובה');
         }
         else {
-            if (regCity.value.length === 0) {
-                evt.preventDefault();
-                alert('שדה עיר ריק והוא שדה חובה');
+            PhonevalidationR(evt, regPhone, 'מספר טלפון');
+            emailValidationR(evt, regMail, 'אימייל');
+            if (regStreet.value.length === 0) {
+                null;
             }
             else {
-                PhonevalidationR(evt, regPhone, 'מספר טלפון');
-                emailValidationR(evt, regMail, 'אימייל');
-                if (regStreet.value.length === 0) {
+                hebStreetValidationR(evt, regStreet, 'רחוב');
+                if (regApartementNum.value.length === 0) {
                     null;
                 }
                 else {
-                    hebStreetValidationR(evt, regStreet, 'רחוב');
-                    if (regApartementNum.value.length === 0) {
+                    apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
+                    cityValidationR(evt, regCity, 'עיר');
+                    if (regOtherPhone.value.length === 0) {
+                        null;
                     }
                     else {
-                        apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
-                        cityValidationR(evt, regCity, 'עיר');
-                        if (regOtherPhone.value.length === 0) {
+                        PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                        if (regHouseNum.value.length === 0) {
                             null;
                         }
                         else {
-                            if (regOtherPhone.value.length === 0) {
-                                null;
-                            }
-                            else {
-                                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
-                                if (regHouseNum.value.length === 0) {
-                                    null;
-                                }
-                                else {
-                                    houseNumValidationR(evt, regHouseNum, 'מספר בית');
-                                }
-                            }
+                            houseNumValidationR(evt, regHouseNum, 'מספר בית');
                         }
                     }
                 }
