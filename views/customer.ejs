@@ -13,11 +13,11 @@
 <form action="/childReg" method="post" class="child-reg" id="child-reg-no">
     <div>
         <label for="">שם הילד *</label>
-        <input type="text" name="childName" id="childNameNo" required oninvalid="this.setCustomValidity('שדה חובה')">
+        <input type="text" name="childName" id="childNameNo" required oninvalid="this.setCustomValidity('שדה חובה')" oninput="this.setCustomValidity('')">
     </div>
     <div>
         <label for="">גיל הילד *</label>
-        <input type="number" name="childAge" id="childAgeNo" required oninvalid="this.setCustomValidity('שדה חובה')">
+        <input type="number" name="childAge" id="childAgeNo" required oninvalid="this.setCustomValidity('שדה חובה')" oninput="this.setCustomValidity('')">
     </div>
     <div id="child-form-user-id">
         <label for="">user_id</label>
