@@ -31,38 +31,18 @@ registrationForm.addEventListener('submit', (evt) => {
             alert('טלפון ריק והוא שדה חובה');
         }
         else {
-            PhonevalidationR(evt, regPhone, 'מספר טלפון');
-            if (regStreet.value.length === 0) {
-                return null;
+            if (regCity.value.length === 0) {
+                evt.preventDefault();
+                alert('שדה עיר ריק והוא שדה חובה');
             }
             else {
+                PhonevalidationR(evt, regPhone, 'מספר טלפון');
+                emailValidationR(evt, regMail, 'אימייל');
                 hebStreetValidationR(evt, regStreet, 'רחוב');
-                if (regHouseNum.value.length === 0) {
-                    return null;
-                }
-                else {
-                    houseNumValidationR(evt, regHouseNum, 'מספר בית');
-                    if (regApartementNum.value.length === 0) {
-                        return null;
-                    }
-                    else {
-                        apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
-                        if (regCity.value.length === 0) {
-                            evt.preventDefault();
-                            alert('שדה עיר ריק והוא שדה חובה');
-                        }
-                        else {
-                            cityValidationR(evt, regCity, 'עיר');
-                            if (regOtherPhone.value.length === 0) {
-                                return null;
-                            }
-                            else {
-                                emailValidationR(evt, regMail, 'אימייל');
-                                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
-                            }
-                        }
-                    }
-                }
+                houseNumValidationR(evt, regHouseNum, 'מספר בית');
+                apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
+                cityValidationR(evt, regCity, 'עיר');
+                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
             }
         }
     }
@@ -140,7 +120,7 @@ function emailValidationR(evt, input, inputLabel) {
     if (test === null) {
         alert('שדה ' + inputLabel + (' לא תקין'));
         input.value = '';
-        evt.preventDefault;
+        evt.preventDefault();
     }
     else {
         return true;
