@@ -17,12 +17,6 @@ const hebStreetRegexU = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05F
 const numRegexU = new RegExp('^[0-9]{0,3}$');
 const emailRegexU = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 //end of regex
-if (upMail.validity.typeMismatch) {
-    upMail.setCustomValidity('בבקשה לרשום אימייל בפורמט נכון');
-}
-else {
-    upMail.setCustomValidity('');
-}
 // form validation
 updateForm.addEventListener('submit', (evt) => {
     if (upName.value.length === 0) {
