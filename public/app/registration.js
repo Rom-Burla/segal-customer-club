@@ -56,8 +56,14 @@ registrationForm.addEventListener('submit', (evt) => {
                                 return null;
                             }
                             else {
-                                emailValidationR(evt, regMail, 'אימייל');
-                                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                                if (regMail.validity.typeMismatch) {
+                                    regMail.setCustomValidity('בבקשה לרשום אימייל בפורמט נכון');
+                                }
+                                else {
+                                    regMail.setCustomValidity('');
+                                    emailValidationR(evt, regMail, 'אימייל');
+                                    PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                                }
                             }
                         }
                     }
