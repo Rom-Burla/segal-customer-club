@@ -247,24 +247,36 @@ app.post('/registration', (req, res) => {
 // Insert new child from the user specific page childReg form
 app.post('/childReg', (req, res) => {
     let { childName, childAge, user_id } = req.body;
-    let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
-    connection.query(query, (err, result) => {
+    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = 83 AND child_age.child_name LIKE '${childName}'`;
+    connection.query(query, (err, checkResult) => {
         if (err)
             throw err;
         if (!err) {
-            let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id}`;
-            connection.query(query, (err, result) => {
-                if (err)
-                    throw err;
-                if (!err) {
-                    if (result.length > 1) {
-                        res.redirect('back');
+            if (checkResult.length > 0) {
+                alert('child already exist');
+            }
+            else {
+                let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
+                connection.query(query, (err, result) => {
+                    if (err)
+                        throw err;
+                    if (!err) {
+                        let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id}`;
+                        connection.query(query, (err, result) => {
+                            if (err)
+                                throw err;
+                            if (!err) {
+                                if (result.length > 1) {
+                                    res.redirect('back');
+                                }
+                                else {
+                                    res.redirect('/');
+                                }
+                            }
+                        });
                     }
-                    else {
-                        res.redirect('/');
-                    }
-                }
-            });
+                });
+            }
         }
     });
 });
