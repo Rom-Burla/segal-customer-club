@@ -146,13 +146,13 @@ select:focus{
 @media only screen and (max-width: 600px) {
     img{
         width: 30%;
-        margin-bottom: 20px;
+        margin-bottom: 20%;
     }
 }
 
 @media only screen and (max-width: 425px) {
         img {
                 width: 30%;
-                margin-bottom: 20px;
+                margin-bottom: 20%;
             }
 }
