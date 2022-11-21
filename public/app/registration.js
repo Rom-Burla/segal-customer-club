@@ -16,7 +16,7 @@ const hebNameRegexR = /[\u0590-\u05FF\u200f\u200e ]{2,9}((([-\s]{1})[\u0590-\u05
 const hebStreetRegexR = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/iu;
 const numRegexR = new RegExp('^[0-9]{0,3}$');
 const emailRegexR = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-const apartementNumRegexR = /^[0-9\u0590-\u05FF\u200f\u200e]{0,2}[\s]{0,1}[[0-9\u0590-\u05FF\u200f\u200e]{0,2}/i;
+const apartementNumRegexR = /^[0-9\u0590-\u05FF\u200f\u200e]{0,2}[\s]{0,1}[[0-9\u0590-\u05FF\u200f\u200e]{0,2}$/i;
 //end of regex
 // form validation
 registrationForm.addEventListener('submit', (evt) => {
