@@ -1,0 +1,27 @@
+<%-include('./partials/header.ejs')%>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/app/customer.js" type="module"></script>
+<title>העמוד של <%=result[0].name%></title>
+<%-include('./partials/navbar.ejs')%>
+
+
+<h1>שלום <%=result[0].name%></h1>
+
+<a href="/update/<%=result[0].id%>"><button>עדכון פרטי משתמש</button></a>
+
+<h2>הוספת ילד</h2>
+<form action="/childReg" method="post" class="child-reg" id="child-reg-no">
+    <div>
+        <label for="">שם הילד</label>
+        <input type="text" name="childName" id="childNameNo">
+    </div>
+    <div>
+        <label for="">גיל הילד</label>
+        <input type="number" name="childAge" id="childAgeNo">
+    </div>
+    <div id="child-form-user-id">
+        <label for="">user_id</label>
+        <input type="text" name="user_id" value=<%=result[0].id%> id="userId">
+    </div>
+    <button>הוסף</button>
+</form>

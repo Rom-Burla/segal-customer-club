@@ -1,0 +1,28 @@
+<%-include('./partials/header.ejs')%>
+<base href="/">
+<link rel="stylesheet" href="/css/style.css">
+<script src="/app/index.js" type="module"></script>
+<title>מועדון לקוחות</title>
+<div class="heading">
+<h1>ברוכים הבאים למועדון הלקוחות של</h1>
+<%-include('./partials/navbar.ejs')%>
+</div>
+    <form action="/getCustPhone" method="post" class="get-phone" id="get-phone-form">
+    <div>
+        <label for="">בחר מוצר</label>
+            <select name="product" id="">
+                <option value=""></option>
+                <%result.forEach(product=>{%>
+                    <option value=<%=product.sku%>><%=product.product_name%></option>
+                    <%})%>
+            </select>
+    </div>
+    <div>
+        <label for="">הכנס את מספר הטלפון שלך</label>
+        <input type="text" name="phoneInp" id="phone-input">
+    </div>
+    <button id="submit-phone">המשך</button>
+    </form>
+
+</body>
+</html>
