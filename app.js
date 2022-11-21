@@ -249,34 +249,33 @@ app.post('/childReg', (req, res) => {
     let { childName, childAge, user_id } = req.body;
     let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name LIKE '${childName}'`;
     connection.query(query, (err, checkResult) => {
+        if (checkResult.length > 0) {
+            err.message = 'child already in the system';
+            throw err;
+        }
         if (err)
             throw err;
         if (!err) {
-            if (checkResult.length > 0) {
-                res.send(alert('שם הילד כבר קיים במערכת'));
-            }
-            else {
-                let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
-                connection.query(query, (err, result) => {
-                    if (err)
-                        throw err;
-                    if (!err) {
-                        let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id}`;
-                        connection.query(query, (err, result) => {
-                            if (err)
-                                throw err;
-                            if (!err) {
-                                if (result.length > 1) {
-                                    res.redirect('back');
-                                }
-                                else {
-                                    res.redirect('/');
-                                }
+            let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
+            connection.query(query, (err, result) => {
+                if (err)
+                    throw err;
+                if (!err) {
+                    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id}`;
+                    connection.query(query, (err, result) => {
+                        if (err)
+                            throw err;
+                        if (!err) {
+                            if (result.length > 1) {
+                                res.redirect('back');
                             }
-                        });
-                    }
-                });
-            }
+                            else {
+                                res.redirect('/');
+                            }
+                        }
+                    });
+                }
+            });
         }
     });
 });
