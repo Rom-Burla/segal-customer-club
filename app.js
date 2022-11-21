@@ -247,7 +247,7 @@ app.post('/registration', (req, res) => {
 // Insert new child from the user specific page childReg form
 app.post('/childReg', (req, res) => {
     let { childName, childAge, user_id } = req.body;
-    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = 83 AND child_age.child_name LIKE '${childName}'`;
+    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name LIKE '${childName}'`;
     connection.query(query, (err, checkResult) => {
         if (err)
             throw err;
