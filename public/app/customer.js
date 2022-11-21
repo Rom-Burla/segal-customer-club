@@ -53,8 +53,9 @@ function childAgeValidationN(evt, input, inputLabel) {
         evt.preventDefault();
     }
     else if (parseInt(input.value) > 14) {
-        evt.preventDefault();
         alert('גיל הילד חייב להיות קטן מ14');
+        input.value = '';
+        evt.preventDefault();
     }
     else {
         return true;
