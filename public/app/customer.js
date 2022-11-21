@@ -18,6 +18,7 @@ childRegNo.addEventListener('submit', (evt) => {
         evt.preventDefault();
     }
     else {
+        null;
     }
 });
 // end of form validation
