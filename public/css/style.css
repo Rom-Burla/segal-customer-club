@@ -10,7 +10,7 @@ body{
     overflow-x: hidden;
 }
 img{
-    width: 25%;
+    width: 300px;
     margin-left: 20px;
 }
 #child-form-user-id {
@@ -142,4 +142,17 @@ select:focus{
     justify-content: center;
     align-items: center;
     gap: 5px;
+}
+@media only screen and (max-width: 600px) {
+    img{
+        width: 30%;
+        margin-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+        img {
+                width: 30%;
+                margin-bottom: 20px;
+            }
 }
