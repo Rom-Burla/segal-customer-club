@@ -38,11 +38,11 @@ updateForm.addEventListener('submit', (evt) => {
             else {
                 PhonevalidationU(evt, upPhone, 'מספר טלפון');
                 hebStreetValidationU(evt, upStreet, 'רחוב');
-                houseNumValidationU(evt, upHouseNum, 'מספר בית');
                 apartementNumValidationU(evt, upApartementNum, 'מספר דירה/ כניסה');
                 cityValidationU(evt, upCity, 'עיר');
                 emailValidationU(evt, upMail, 'אימייל');
                 PhonevalidationU(evt, upOtherPhone, 'מספר הטלפון הנוסף');
+                houseNumValidationU(evt, upHouseNum, 'מספר בית');
             }
         }
     }

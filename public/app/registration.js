@@ -39,10 +39,10 @@ registrationForm.addEventListener('submit', (evt) => {
                 PhonevalidationR(evt, regPhone, 'מספר טלפון');
                 emailValidationR(evt, regMail, 'אימייל');
                 hebStreetValidationR(evt, regStreet, 'רחוב');
-                houseNumValidationR(evt, regHouseNum, 'מספר בית');
                 apartementNumValidationR(evt, regApartementNum, 'מספר דירה/ כניסה');
                 cityValidationR(evt, regCity, 'עיר');
                 PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
+                houseNumValidationR(evt, regHouseNum, 'מספר בית');
             }
         }
     }
