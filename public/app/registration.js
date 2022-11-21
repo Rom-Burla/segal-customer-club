@@ -17,6 +17,12 @@ const hebStreetRegexR = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05F
 const numRegexR = new RegExp('^[0-9]{0,3}$');
 const emailRegexR = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 //end of regex
+if (regMail.validity.typeMismatch) {
+    regMail.setCustomValidity('בבקשה לרשום אימייל בפורמט נכון');
+}
+else {
+    regMail.setCustomValidity('');
+}
 // form validation
 registrationForm.addEventListener('submit', (evt) => {
     if (regName.value.length === 0) {
@@ -56,14 +62,8 @@ registrationForm.addEventListener('submit', (evt) => {
                                 return null;
                             }
                             else {
-                                if (regMail.validity.typeMismatch) {
-                                    regMail.setCustomValidity('בבקשה לרשום אימייל בפורמט נכון');
-                                }
-                                else {
-                                    regMail.setCustomValidity('');
-                                    emailValidationR(evt, regMail, 'אימייל');
-                                    PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
-                                }
+                                emailValidationR(evt, regMail, 'אימייל');
+                                PhonevalidationR(evt, regOtherPhone, 'מספר הטלפון הנוסף');
                             }
                         }
                     }
