@@ -11,13 +11,13 @@ const ageRegexN = new RegExp('^[0-9]{1,2}$');
 // end of regex
 // form validation
 childRegNo.addEventListener('submit', (evt) => {
+    hebNameValidationN(evt, childNameNo, 'שם הילד');
+    childAgeValidationN(evt, childAgeNo, 'גיל הילד');
     if (userId.value.length === 0) {
         alert('המשתמש לא רשום');
         evt.preventDefault();
     }
     else {
-        hebNameValidationN(evt, childNameNo, 'שם הילד');
-        childAgeValidationN(evt, childAgeNo, 'גיל הילד');
     }
 });
 // end of form validation
