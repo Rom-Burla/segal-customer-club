@@ -11,14 +11,21 @@ const ageRegexN = new RegExp('^[0-9]{1,2}$');
 // end of regex
 // form validation
 childRegNo.addEventListener('submit', (evt) => {
-    hebNameValidationN(evt, childNameNo, 'שם הילד');
-    childAgeValidationN(evt, childAgeNo, 'גיל הילד');
-    if (userId.value.length === 0) {
-        alert('המשתמש לא רשום');
+    if (childNameNo.value.matchAll(/^[0-9]$/g)) {
+        alert('שדה שם הילד לא יכול לכלול מספרים');
+        childNameNo.value = '';
         evt.preventDefault();
     }
     else {
-        null;
+        hebNameValidationN(evt, childNameNo, 'שם הילד');
+        childAgeValidationN(evt, childAgeNo, 'גיל הילד');
+        if (userId.value.length === 0) {
+            alert('המשתמש לא רשום');
+            evt.preventDefault();
+        }
+        else {
+            null;
+        }
     }
 });
 // end of form validation
