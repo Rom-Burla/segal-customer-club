@@ -10,7 +10,7 @@ body{
     overflow-x: hidden;
 }
 img{
-    width: 300px;
+    width: 25%;
     margin-left: 20px;
 }
 #child-form-user-id {
