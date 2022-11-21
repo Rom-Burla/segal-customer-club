@@ -6,26 +6,19 @@ let childAgeNo = document.getElementById('childAgeNo');
 let userId = document.getElementById('userId');
 // end of child registration no children inputs
 // regex
-const hebNameRegexN = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/iug;
+const hebNameRegexN = /^[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}$/g;
 const ageRegexN = new RegExp('^[0-9]{1,2}$');
 // end of regex
 // form validation
 childRegNo.addEventListener('submit', (evt) => {
-    if (childNameNo.value.matchAll(/^[0-9]$/g)) {
-        alert('שדה שם הילד לא יכול לכלול מספרים');
-        childNameNo.value = '';
+    hebNameValidationN(evt, childNameNo, 'שם הילד');
+    childAgeValidationN(evt, childAgeNo, 'גיל הילד');
+    if (userId.value.length === 0) {
+        alert('המשתמש לא רשום');
         evt.preventDefault();
     }
     else {
-        hebNameValidationN(evt, childNameNo, 'שם הילד');
-        childAgeValidationN(evt, childAgeNo, 'גיל הילד');
-        if (userId.value.length === 0) {
-            alert('המשתמש לא רשום');
-            evt.preventDefault();
-        }
-        else {
-            null;
-        }
+        null;
     }
 });
 // end of form validation
