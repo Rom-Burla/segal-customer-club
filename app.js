@@ -16,7 +16,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require("cookie-parser");
-const port = 3000;
+const port = process.env.PORT || 3306;
 // express uses
 app.use(express.urlencoded({
     extended: true
