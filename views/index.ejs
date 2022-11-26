@@ -13,7 +13,7 @@
     </div>
     <% } %>
     <form action="/getCustPhone" method="post" class="get-phone" id="get-phone-form">
-    <div>
+    <div class = "product-dropdown">
         <label for="">בחר מוצר</label>
             <select name="product" id="">
                 <option value=""></option>
@@ -23,7 +23,7 @@
             </select>
     </div>
     <div>
-        <label for="">הכנס את מספר הטלפון שלך</label>
+        <label for="">הכנס את מספר הטלפון הראשי</label>
         <input type="text" name="phoneInp" id="phone-input" required oninvalid="this.setCustomValidity('הכנס מספר טלפון כדי להמשיך')" oninput="this.setCustomValidity('')">
     </div>
     <button id="submit-phone">המשך</button>

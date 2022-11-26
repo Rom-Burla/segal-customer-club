@@ -16,7 +16,7 @@ const mysql = require('mysql');
 const session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require("cookie-parser");
-const port = process.env.PORT || 3306;
+const port = 3000;
 // express uses
 app.use(express.urlencoded({
     extended: true
@@ -40,7 +40,7 @@ const connection = mysql.createConnection({
     host: 'segal-customers-service.cjfdavkdcwsh.eu-central-1.rds.amazonaws.com',
     user: "admin",
     password: "awstest1",
-    database: "segal-customers-club",
+    database: "segal-customer",
     multipleStatements: true,
 });
 // error trace limit
@@ -197,12 +197,31 @@ app.get('/registration', (req, res) => {
 // Render update page (by id)
 app.get('/update/:id', (req, res) => {
     let id = req.params.id;
-    let query = `SELECT * FROM users WHERE id = ${id}`;
-    connection.query(query, (err, result) => {
+    let query = `SELECT * FROM users WHERE id = ?`;
+    connection.query(query, [id], (err, result) => {
         if (err)
             throw err;
         if (!err) {
-            res.render('update-cust-details.ejs', { result });
+            const message = req.flash('success');
+            res.render('update-cust-details.ejs', { result, message });
+        }
+    });
+});
+app.get('/orders/:id', (req, res) => {
+    let id = req.params.id;
+    let query = `SELECT users.id, users.name, orders.id AS \'order_id\', orders.order_day, orders.order_month, orders.order_year, products.product_name, quantity FROM order_product JOIN orders ON order_id = orders.id JOIN users ON orders.user_id = users.id JOIN products ON product_sku = products.sku WHERE users.id = ` + connection.escape(id);
+    let query2 = `SELECT users.name, orders.id, orders.order_day, orders.order_month, orders.order_year, products.product_name, quantity FROM order_product
+JOIN orders ON order_id = orders.id
+JOIN users ON orders.user_id = users.id
+JOIN products ON product_sku = products.sku
+WHERE users.id = ` + connection.escape(id) + ` GROUP BY order_id`;
+    connection.query(`${query};${query2}`, [1, 2], (err, result) => {
+        if (err)
+            throw err;
+        if (!err) {
+            console.log(result[0]);
+            console.log(result[1]);
+            res.render('orders.ejs', { result });
         }
     });
 });
@@ -246,11 +265,11 @@ app.post('/getCustPhone', (req, res) => __awaiter(void 0, void 0, void 0, functi
         }
     });
 }));
-// Insert user to database after filling the registration form 
+// Insert user to database after filling the registration form
 app.post('/registration', (req, res) => {
     let { name, phone, otherPhone, email, street, houseNum, apartementNum, city } = req.body;
-    let query = `SELECT * FROM users WHERE email = '${email}'`;
-    connection.query(query, (err, result) => {
+    let query = `SELECT * FROM users WHERE email = ?`;
+    connection.query(query, [email], (err, result) => {
         if (err)
             throw err;
         if (!err) {
@@ -259,8 +278,8 @@ app.post('/registration', (req, res) => {
                 res.redirect('back');
             }
             else {
-                let query = `SELECT * FROM users WHERE phone = '${phone}'`;
-                connection.query(query, (err, result) => {
+                let query = `SELECT * FROM users WHERE phone = ?`;
+                connection.query(query, [phone], (err, result) => {
                     if (err)
                         throw err;
                     if (!err) {
@@ -269,8 +288,8 @@ app.post('/registration', (req, res) => {
                             res.redirect('back');
                         }
                         else {
-                            let query = `SELECT * FROM users WHERE phone = '${otherPhone}'`;
-                            connection.query(query, (err, result) => {
+                            let query = `SELECT * FROM users WHERE phone = ?`;
+                            connection.query(query, [otherPhone], (err, result) => {
                                 if (err)
                                     throw err;
                                 if (!err) {
@@ -279,8 +298,8 @@ app.post('/registration', (req, res) => {
                                         res.redirect('back');
                                     }
                                     else {
-                                        let query = `SELECT * FROM users WHERE other_phone = '${phone}'`;
-                                        connection.query(query, (err, result) => {
+                                        let query = `SELECT * FROM users WHERE other_phone = ?`;
+                                        connection.query(query, [phone], (err, result) => {
                                             if (err)
                                                 throw err;
                                             if (!err) {
@@ -289,18 +308,20 @@ app.post('/registration', (req, res) => {
                                                     res.redirect('back');
                                                 }
                                                 else {
-                                                    let query = `SELECT * FROM users WHERE other_phone = '${otherPhone}'`;
-                                                    connection.query(query, (err, result) => {
+                                                    let query = `SELECT * FROM users WHERE other_phone = ?`;
+                                                    connection.query(query, [otherPhone], (err, result) => {
                                                         if (err)
                                                             throw err;
                                                         if (!err) {
-                                                            if (result.length > 0) {
-                                                                req.flash('success', 'הטלפון הנוסף כבר קיים במערכת');
-                                                                res.redirect('back');
+                                                            if (otherPhone.length > 0) {
+                                                                if (result.length > 0) {
+                                                                    req.flash('success', 'הטלפון הנוסף כבר קיים במערכת');
+                                                                    res.redirect('back');
+                                                                }
                                                             }
                                                             else {
-                                                                let query = `INSERT INTO \`users\`( \`name\`, \`phone\`, \`other_phone\`, \`str_address\`, \`house_num\`, \`apartement_num\`, \`city\`, \`email\`) VALUES("${name}","${phone}","${otherPhone}","${street}",${houseNum},"${apartementNum}", "${city}", "${email}")`;
-                                                                connection.query(query, (err, result) => {
+                                                                let query = `INSERT INTO \`users\`( \`name\`, \`phone\`, \`other_phone\`, \`str_address\`, \`house_num\`, \`apartement_num\`, \`city\`, \`email\`) VALUES(?,?,?,?,?,?,?,?)`;
+                                                                connection.query(query, [name, phone, otherPhone, street, houseNum.length === 0 ? houseNum = null : houseNum, apartementNum, city, email], (err, result) => {
                                                                     if (err)
                                                                         throw err;
                                                                     if (!err) {
@@ -327,8 +348,8 @@ app.post('/registration', (req, res) => {
 // Insert new child from the user specific page childReg form
 app.post('/childReg', (req, res) => {
     let { childName, childAge, user_id, user_phone } = req.body;
-    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id} AND child_age.child_name = '${childName}'`;
-    connection.query(query, (err, result) => __awaiter(void 0, void 0, void 0, function* () {
+    let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ? AND child_age.child_name = ?`;
+    connection.query(query, [user_id, childName], (err, result) => __awaiter(void 0, void 0, void 0, function* () {
         if (err)
             throw err;
         if (!err) {
@@ -348,13 +369,13 @@ app.post('/childReg', (req, res) => {
                 console.log('duplicate');
             }
             else {
-                let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES("${childName}",${childAge},${user_id})`;
-                connection.query(query, (err, result) => {
+                let query = `INSERT INTO \`child_age\`(\`child_name\`, \`age\`, \`user_id\`) VALUES(?,?,?)`;
+                connection.query(query, [childName, childAge, user_id], (err, result) => {
                     if (err)
                         throw err;
                     if (!err) {
-                        let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ${user_id}`;
-                        connection.query(query, (err, result) => {
+                        let query = `SELECT * FROM \`users\` JOIN child_age ON id = child_age.user_id WHERE id = ?`;
+                        connection.query(query, [user_id], (err, result) => {
                             if (err)
                                 throw err;
                             if (!err) {
@@ -378,17 +399,269 @@ app.post('/childReg', (req, res) => {
 app.post('/update/:id', (req, res) => {
     let id = req.params.id;
     let { name, phone, otherPhone, email, street, houseNum, apartementNum, city } = req.body;
-    let query = `UPDATE \`users\` SET \`name\`='${name}',\`phone\`='${phone}',\`other_phone\`='${otherPhone}',\`str_address\`='${street}',\`house_num\`='${houseNum}',\`apartement_num\`='${apartementNum}',\`city\`='${city}',\`email\`="${email}" WHERE \`id\` = ${id}`;
-    connection.query(query, (err, result) => {
-        if (err)
-            throw err;
-        if (!err) {
-            console.log(result);
-        }
-    });
-    req.flash('success', 'פרטי המשתמש עודכנו בהצלחה הכנס מספר טלפון כדי להכנס');
-    res.redirect('/');
+    if (otherPhone.length === 0) {
+        connection.query(`SELECT * FROM users WHERE id = ? AND phone = ?`, [id, phone], (err, result) => {
+            if (result.length === 0) {
+                connection.query(`SELECT * FROM users WHERE users.phone = ? OR users.other_phone = ?`, [phone, phone], (err, result) => {
+                    if (result.length === 0) {
+                        connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                            if (result.length === 0) {
+                                connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                                    if (result.length === 0) {
+                                        connection.query(`UPDATE users SET name = ?, phone=?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                            req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                            res.redirect('back');
+                                        });
+                                    }
+                                    else {
+                                        req.flash('success', 'אימייל כבר קיים במערכת');
+                                        res.redirect('back');
+                                    }
+                                });
+                            }
+                            else {
+                                connection.query(`UPDATE users SET name = ?, phone=?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                    req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                    res.redirect('back');
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        req.flash('success', 'מספר טלפון כבר קיים במערכת');
+                        res.redirect('back');
+                    }
+                });
+            }
+            else {
+                connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                    if (result.length === 0) {
+                        connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                            if (result.length === 0) {
+                                connection.query(`UPDATE users SET name = ?, phone=?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                    if (err)
+                                        throw err;
+                                    if (!err) {
+                                        req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                        res.redirect('back');
+                                    }
+                                });
+                            }
+                            else {
+                                req.flash('success', 'אימייל כבר קיים במערכת');
+                                res.redirect('back');
+                            }
+                        });
+                    }
+                    else {
+                        connection.query(`UPDATE users SET name = ?, phone=?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                            if (err)
+                                throw err;
+                            if (!err) {
+                                req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                res.redirect('back');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+    else {
+        connection.query(`SELECT * FROM users WHERE id = ? AND phone = ?`, [id, phone], (err, result) => {
+            if (result.length === 0) {
+                connection.query(`SELECT * FROM users WHERE phone = ?`, [phone], (err, result) => {
+                    if (result.length === 0) {
+                        connection.query(`SELECT * FROM users WHERE phone = ? `, [otherPhone || phone], (err, result) => {
+                            if (result.length === 0) {
+                                connection.query(`SELECT * FROM users WHERE id = ? AND other_phone = ?`, [id, otherPhone], (err, result) => {
+                                    if (result.length === 0) {
+                                        connection.query(`SELECT * FROM users WHERE other_phone = ?`, [otherPhone], (err, result) => {
+                                            if (result.length === 0) {
+                                                connection.query(`SELECT * FROM users WHERE users.other_phone = ? OR users.phone = ?`, [phone, phone], (err, result) => {
+                                                    if (result.length === 0) {
+                                                        connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                                                            if (result.length === 0) {
+                                                                connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                                                                    if (result.length === 0) {
+                                                                        connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                                            if (err)
+                                                                                throw err;
+                                                                            if (!err) {
+                                                                                req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                                                res.redirect('back');
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    else {
+                                                                        req.flash('success', 'אימייל כבר קיים במערכת');
+                                                                        res.redirect('back');
+                                                                    }
+                                                                });
+                                                            }
+                                                            else {
+                                                                connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                                    if (err)
+                                                                        throw err;
+                                                                    if (!err) {
+                                                                        req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                                        res.redirect('back');
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        req.flash('success', 'מספר הטלפון הנוסף כבר קיים במערכת');
+                                                        res.redirect('back');
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                req.flash('success', 'מספר הטלפון כבר קיים במערכת');
+                                                res.redirect('back');
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                                            if (result.length === 0) {
+                                                connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                                                    if (result.length === 0) {
+                                                        connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num =?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                            if (err)
+                                                                throw err;
+                                                            if (!err) {
+                                                                req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        req.flash('success', 'אימייל כבר קיים במערכת');
+                                                        res.redirect('back');
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                    if (err)
+                                                        throw err;
+                                                    if (!err) {
+                                                        req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                        res.redirect('back');
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else {
+                                req.flash('success', 'מספר הטלפון הנוסף כבר קיים במערכת');
+                                res.redirect('back');
+                            }
+                        });
+                    }
+                    else {
+                        req.flash('success', 'מספר הטלפון כבר קיים במערכת');
+                        res.redirect('back');
+                    }
+                });
+            }
+            else {
+                connection.query(`SELECT * FROM users WHERE id = ? AND other_phone = ?`, [id, otherPhone], (err, result) => {
+                    if (result.length === 0) {
+                        connection.query(`SELECT * FROM users WHERE other_phone = ?`, [phone], (err, result) => {
+                            if (result.length === 0) {
+                                connection.query(`SELECT * FROM users WHERE users.other_phone = ? OR users.phone`, [otherPhone], (err, result) => {
+                                    if (result.length === 0) {
+                                        connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                                            if (result.length === 0) {
+                                                connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                                                    if (result.length === 0) {
+                                                        connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num =?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                            if (err)
+                                                                throw err;
+                                                            if (!err) {
+                                                                req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                                res.redirect('back');
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        req.flash('success', 'אימייל כבר קיים במערכת');
+                                                        res.redirect('back');
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                                    if (err)
+                                                        throw err;
+                                                    if (!err) {
+                                                        req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                                        res.redirect('back');
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        req.flash('success', 'טלפון נוסף כבר קיים במערכת');
+                                        res.redirect('back');
+                                    }
+                                });
+                            }
+                            else {
+                                req.flash('success', 'טלפון כבר קיים במערכת');
+                                res.redirect('back');
+                            }
+                        });
+                    }
+                    else {
+                        connection.query(`SELECT * FROM users WHERE id = ? AND email = ?`, [id, email], (err, result) => {
+                            if (result.length === 0) {
+                                connection.query(`SELECT * FROM users WHERE email = ?`, [email], (err, result) => {
+                                    if (result.length === 0) {
+                                        connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?, house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                            req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                            res.redirect('back');
+                                        });
+                                    }
+                                    else {
+                                        req.flash('success', 'אימייל כבר קיים במערכת');
+                                        res.redirect('back');
+                                    }
+                                });
+                            }
+                            else {
+                                connection.query(`UPDATE users SET name = ?, phone = ?, other_phone = ?, str_address = ?,house_num = ?, apartement_num = ?, city = ?, email = ? WHERE id = ?`, [name, phone, otherPhone, street, houseNum, apartementNum, city, email, id], (err, result) => {
+                                    if (err)
+                                        throw err;
+                                    if (!err) {
+                                        req.flash('success', 'פרטי המשתמש עודכנו בהצלחה');
+                                        res.redirect('back');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 });
+//        let query = `UPDATE \`users\` SET \`name\`=?,\`phone\`=?,\`other_phone\`=?,\`str_address\`=?,\`house_num\`=?,\`apartement_num\`=?,\`city\`=?,\`email\`=? WHERE \`id\` = ?`
+// connection.query(query,[name,phone,otherPhone,street,houseNum,apartementNum,city,email,id],(err:Error,result:Array<Object>)=>{
+//     if (err)throw err
+//     if(!err){
+//     console.log(result);
+//     }
+// })
+//     req.flash('success', 'פרטי המשתמש עודכנו בהצלחה הכנס מספר טלפון כדי להכנס')
+// res.redirect('/')
+// req.flash('success', 'פרטי המשתמש עודכנו בהצלחה הכנס מספר טלפון כדי להכנס')
+// res.redirect('/')
 app.listen(port, (err, res) => {
     if (err) {
         res.redirect('/');

@@ -1,0 +1,20 @@
+<%-include('./partials/header.ejs')%>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/app/orders.js" type="module"></script>
+<title>ההזמנות של <%=result[0].name%></title>
+<%-include('./partials/navbar.ejs')%>
+
+<%result[1].forEach((order)=>{%>
+<div class="flash orders">
+    <p>מספר ההזמנה: <%=order.id%></p>
+    <p>תאריך הזמנה: <%=order.order_day%>/<%=order.order_month%>/<%=order.order_year%></p>
+    <div class="products">
+    <%result[0].forEach((item)=>{%>
+        <%if(order.id===item.order_id){%>
+                <p>שם המוצר: <%=item.product_name%><br>כמות: <%=item.quantity%></p>
+                
+                <%}%>   
+                <%})%>
+            </div>         
+</div>
+<%})%>

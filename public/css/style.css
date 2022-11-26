@@ -66,6 +66,7 @@ form.get-phone{
 }
 button{
     padding: 15px 40px;
+    margin: 10px;
     border: none;
     border-radius: 30px;
     background-color: black;
@@ -224,4 +225,17 @@ select:focus{
     border-radius: 25px;
     margin-bottom: 20px;
     box-shadow: 0px 0px 5px 5px #afaeae9d;
+}
+.product-dropdown select, .product-dropdown label{
+    display: none;
+}
+.orders{
+    margin-top: 35px;
+}
+.products{
+    background-color: rgba(126, 126, 126, 0.685);
+    border-radius: 40px;
+    box-shadow: 0px 0px 5px 8px #ffffffd3;
+    margin:20px;
+    padding: 2px;
 }

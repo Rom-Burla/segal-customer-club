@@ -3,9 +3,13 @@
 <script src="/app/update.js" type="module"></script>
 <title><%=result[0].name%> עדכון פרטים</title>
 <%-include('./partials/navbar.ejs')%>
-
 <button class="back-btn"><a href="/">חזרה לדף הבית</a></button>
 <h1><%=result[0].name%> עדכון פרטי משתמש</h1>
+<% if (message.length>0) { %>
+    <div class="flash">
+    <h3><%= message %></h3>
+    </div>
+    <% } %>
 <form action="/update/<%=result[0].id%>" method="post" class="registration-form" id="update-form">
    <div>
     <label for="">שם מלא</label>
