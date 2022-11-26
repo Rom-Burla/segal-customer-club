@@ -93,7 +93,7 @@ function PhonevalidationU(evt, input, inputLabel) {
 }
 function hebStreetValidationU(evt, input, inputLabel) {
     let test = input.value.match(hebStreetRegexU);
-    if (test === null) {
+    if (test === null || input.value.match(/\d+/g)) {
         alert('שדה ' + inputLabel + ' לא תקין');
         input.value = '';
         evt.preventDefault();
