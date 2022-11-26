@@ -4,7 +4,7 @@
 <title>ההזמנות של <%=result[0].name%></title>
 <%-include('./partials/navbar.ejs')%>
 
-<a href="<%document.referrer%>"><button>חזרה לעמוד משתמש</button></a>
+<div class="back"></div>
 <% if (result[1].length===0){%>
     <div class="flash orders">
         <p>אין הזמנות ללקוח</p>
