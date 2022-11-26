@@ -70,8 +70,8 @@ updateForm.addEventListener('submit', (evt) => {
 // end of form validation
 // validation functions
 function hebNameValidationU(evt, input, inputLabel) {
-    let test = input.value.matchAll(hebNameRegexU);
-    if (test === null) {
+    let test = input.value.match(hebNameRegexU);
+    if (test === null || input.value.match(/\d+/g)) {
         alert('שדה ' + inputLabel + ' לא תקין');
         input.value = '';
         evt.preventDefault();
