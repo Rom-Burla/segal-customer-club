@@ -231,14 +231,15 @@ select:focus{
 }
 .orders{
     margin-top: 35px;
+    width: 50vw;
 }
-.products{
+/* .products{
     background-color: rgba(126, 126, 126, 0.685);
     border-radius: 40px;
     box-shadow: 0px 0px 5px 8px #ffffffd3;
     margin:20px;
     padding: 2px;
-}
+} */
 #back{
     margin: 35px;
 }
