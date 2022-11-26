@@ -12,8 +12,8 @@ let upCity = document.getElementById('upCity');
 // end of update form inputs
 // regex
 const phoneRegexU = new RegExp('^\\+?(972|0)(\\-)?0?(([23489]{1}\\d{7})|[5]{1}\\d{8})$');
-const hebNameRegexU = /[\u0590-\u05FF\u200f\u200e ]{2,9}((([-\s]{1})[\u0590-\u05FF\u200f\u200e]{2,9}))?((([-\s]{1})[\u0590-\u05FF\u200f\u200e]{2,9}))/iu;
-const hebStreetRegexU = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/iu;
+const hebNameRegexU = /[\u0590-\u05FF\u200f\u200e ]{2,9}((([-\s]{1})[\u0590-\u05FF\u200f\u200e]{2,9}))?((([-\s]{1})[\u0590-\u05FF\u200f\u200e]{2,9}))/g;
+const hebStreetRegexU = /[\u0590-\u05FF\u200f\u200e]{2,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}[-\s]{0,1}[\u0590-\u05FF\u200f\u200e]{0,9}/g;
 const numRegexU = new RegExp('^[0-9]{0,3}$');
 const emailRegexU = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 const apartementNumRegexU = /^[0-9\u0590-\u05FF\u200f\u200e]{0,2}[\s]{0,1}[[0-9\u0590-\u05FF\u200f\u200e]{0,2}$/i;
